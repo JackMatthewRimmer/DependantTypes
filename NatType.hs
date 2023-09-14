@@ -9,14 +9,13 @@ import Data.Kind (Type)
 
 -- Peano Reprisentation of Natual Numbers 
 data Nat = Zero | Succ ( Nat )
-  deriving (Show)
 
 -- defining num instance however some of the functions will be useless so not defined
 instance Num Nat where
   n + m = n `natAdd` m
   n * m = n `natMul` m
   abs n = n
-  fromInteger = itn 
+  fromInteger = nat 
 
 instance Eq Nat where
   Zero == Zero = True
@@ -27,6 +26,9 @@ instance Ord Nat where
   compare n m | n == m = EQ
               | natLE n m = LT
               | otherwise = GT
+
+instance Show Nat where
+  show = show . showNat 
 
 
 natAdd :: Nat -> Nat -> Nat 
@@ -45,8 +47,16 @@ natLE (Succ n) Zero = False
 natLE (Succ n) (Succ m) = natLE n m
 
 -- itn == Int to Nat
-itn :: Integer -> Nat
-itn 0 = Zero
-itn n
-  | n > 0     = Succ (itn (n - 1))
+nat :: Integer -> Nat
+nat 0 = Zero
+nat n
+  | n > 0     = Succ (nat (n - 1))
   | otherwise = error "intToNat is only defined for non-negative integers"
+
+showNat :: Nat -> Integer
+showNat Zero = 0
+showNat (Succ n) = nti (Succ n) 0 
+
+nti :: Nat -> Integer -> Integer
+nti Zero x = x
+nti (Succ n) x = nti n (x+1) 
