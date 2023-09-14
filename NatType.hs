@@ -10,7 +10,7 @@ import Data.Kind (Type)
 -- Peano Reprisentation of Natual Numbers 
 data Nat = Zero | Succ ( Nat )
 
--- defining num instance however some of the functions will be useless so not defined
+-- incomplete definition
 instance Num Nat where
   n + m = n `natAdd` m
   n * m = n `natMul` m
@@ -29,7 +29,6 @@ instance Ord Nat where
 
 instance Show Nat where
   show = show . showNat 
-
 
 natAdd :: Nat -> Nat -> Nat 
 natAdd Zero m = m
@@ -53,10 +52,10 @@ nat n
   | n > 0     = Succ (nat (n - 1))
   | otherwise = error "intToNat is only defined for non-negative integers"
 
+int :: Nat -> Integer -> Integer
+int Zero x = x
+int (Succ n) x = int n (x+1) 
+
 showNat :: Nat -> Integer
 showNat Zero = 0
-showNat (Succ n) = nti (Succ n) 0 
-
-nti :: Nat -> Integer -> Integer
-nti Zero x = x
-nti (Succ n) x = nti n (x+1) 
+showNat (Succ n) = int (Succ n) 0 
